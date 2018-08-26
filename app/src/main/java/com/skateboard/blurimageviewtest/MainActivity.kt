@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity()
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        bitmap = BitmapFactory.decodeResource(resources, R.drawable.timg, null)
+        bitmap = BitmapFactory.decodeResource(resources, R.drawable.pics, null)
         bitmap?.let {
 
             blurImageView.setImageBitmap(it)

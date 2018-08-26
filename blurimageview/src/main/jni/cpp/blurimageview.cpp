@@ -143,11 +143,11 @@ void prepareVertex() {
 JNIEXPORT void JNICALL
 Java_com_skateboard_blurimageview_BlurImageViewRender_prepare(JNIEnv *env, jobject thiz,
                                                               jstring vertex, jstring fragment,
-                                                              jobject bitmap,jint srcWidth,jint srcHeight) {
+                                                              jobject bitmap, jint srcWidth, jint srcHeight) {
     generateProgram(env, vertex, fragment);
     prepareVertex();
     prepareTexture(env, bitmap);
-    prepareFrameBuffer(srcWidth,srcHeight);
+    prepareFrameBuffer(srcWidth, srcHeight);
 }
 
 void setMatrix() {
