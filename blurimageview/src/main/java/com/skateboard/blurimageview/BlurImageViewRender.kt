@@ -9,7 +9,7 @@ import java.io.*
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class BlurImageViewRender(private val context: Context,private val bitmap: Bitmap) : GLSurfaceView.Renderer
+class BlurImageViewRender(private val context: Context, private val bitmap: Bitmap) : GLSurfaceView.Renderer
 {
 
 
@@ -45,7 +45,7 @@ class BlurImageViewRender(private val context: Context,private val bitmap: Bitma
         val vertex = readSlgl("vertex.slgl")
         val fragment = readSlgl("fragment.slgl")
         prepare(vertex, fragment, bitmap, width, height)
-        bitmap.recycle()
+        //        bitmap.recycle()
         GLES30.glViewport(0, 0, width, height)
     }
 

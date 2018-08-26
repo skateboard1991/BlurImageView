@@ -1,5 +1,6 @@
 package com.skateboard.blurimageviewtest
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -8,13 +9,19 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity()
 {
 
+    private var bitmap: Bitmap? = null
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        blurImageView.setImageBitmap(BitmapFactory.decodeResource(resources,R.drawable.timg,null))
+        bitmap = BitmapFactory.decodeResource(resources, R.drawable.timg, null)
+        bitmap?.let {
+
+            blurImageView.setImageBitmap(it)
+        }
         // Example of a call to a native method
-//        sample_text.text = stringFromJNI()
+        //        sample_text.text = stringFromJNI()
     }
 
 
@@ -28,6 +35,13 @@ class MainActivity : AppCompatActivity()
     {
         super.onPause()
         blurImageView.onPause()
+    }
+
+
+    override fun onDestroy()
+    {
+        super.onDestroy()
+        bitmap?.recycle()
     }
 
     /**
