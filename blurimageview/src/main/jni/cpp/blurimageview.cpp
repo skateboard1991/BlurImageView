@@ -80,7 +80,7 @@ void prepareFrameBuffer(int width, int height) {
         glBindFramebuffer(GL_FRAMEBUFFER, FBUFFERS[i]);
         glBindTexture(GL_TEXTURE_2D, FBUFFERTEXTURE[i]);
         glTexImage2D(
-                GL_TEXTURE_2D, 0, GL_RGBA, 1080, 1920, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL
+                GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL
         );
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -122,7 +122,6 @@ void prepareTexture(JNIEnv *env, jobject bitmap) {
         }
         AndroidBitmap_unlockPixels(env, bitmap);
     }
-    prepareFrameBuffer(info.width, info.height);
 }
 
 
@@ -144,10 +143,11 @@ void prepareVertex() {
 JNIEXPORT void JNICALL
 Java_com_skateboard_blurimageview_BlurImageViewRender_prepare(JNIEnv *env, jobject thiz,
                                                               jstring vertex, jstring fragment,
-                                                              jobject bitmap) {
+                                                              jobject bitmap,jint srcWidth,jint srcHeight) {
     generateProgram(env, vertex, fragment);
     prepareVertex();
     prepareTexture(env, bitmap);
+    prepareFrameBuffer(srcWidth,srcHeight);
 }
 
 void setMatrix() {

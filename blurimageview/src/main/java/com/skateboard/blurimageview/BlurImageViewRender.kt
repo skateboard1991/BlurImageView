@@ -9,17 +9,13 @@ import java.io.*
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class BlurImageViewRender(private val context: Context) : GLSurfaceView.Renderer
+class BlurImageViewRender(private val context: Context,private val bitmap: Bitmap) : GLSurfaceView.Renderer
 {
 
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?)
     {
-        val vertex = readSlgl("vertex.slgl")
-        val fragment = readSlgl("fragment.slgl")
-        val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.timg)
-        prepare(vertex, fragment, bitmap)
-        bitmap.recycle()
+
     }
 
     private fun readSlgl(fileName: String): String
@@ -35,7 +31,8 @@ class BlurImageViewRender(private val context: Context) : GLSurfaceView.Renderer
                 item = inReader.readLine()
             }
             inReader.close()
-        } catch (e: IOException)
+        }
+        catch (e: IOException)
         {
             e.printStackTrace()
         }
@@ -45,6 +42,10 @@ class BlurImageViewRender(private val context: Context) : GLSurfaceView.Renderer
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int)
     {
+        val vertex = readSlgl("vertex.slgl")
+        val fragment = readSlgl("fragment.slgl")
+        prepare(vertex, fragment, bitmap, width, height)
+        bitmap.recycle()
         GLES30.glViewport(0, 0, width, height)
     }
 
@@ -61,7 +62,7 @@ class BlurImageViewRender(private val context: Context) : GLSurfaceView.Renderer
         }
     }
 
-    external fun prepare(vertex: String, fragment: String, bitmap: Bitmap)
+    external fun prepare(vertex: String, fragment: String, bitmap: Bitmap, scrWidth: Int, scrHeight: Int)
 
     external fun draw()
 }
