@@ -9,7 +9,7 @@ class BlurImageView(context: Context, attributeSet: AttributeSet?) : GLSurfaceVi
 {
     private var isSetRender = false
 
-    private lateinit var render: BlurImageViewRender
+    private var render: BlurImageViewRender
 
     init
     {
