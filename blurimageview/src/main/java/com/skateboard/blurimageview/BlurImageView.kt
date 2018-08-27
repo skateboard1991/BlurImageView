@@ -7,15 +7,40 @@ import android.util.AttributeSet
 
 class BlurImageView(context: Context, attributeSet: AttributeSet?) : GLSurfaceView(context, attributeSet)
 {
+    private var isSetRender = false
+
+    private lateinit var render: BlurImageViewRender
+
     init
     {
         setEGLContextClientVersion(3)
-
+        render = BlurImageViewRender(context, null)
+        setRenderer(render)
+        renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+        isSetRender = true
     }
 
     fun setImageBitmap(bitmap: Bitmap)
     {
-        setRenderer(BlurImageViewRender(context, bitmap))
-        renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+        queueEvent {
+
+            render.setImageBitmap(bitmap)
+        }
+    }
+
+    override fun onResume()
+    {
+        if (isSetRender)
+        {
+            super.onResume()
+        }
+    }
+
+    override fun onPause()
+    {
+        if (isSetRender)
+        {
+            super.onPause()
+        }
     }
 }

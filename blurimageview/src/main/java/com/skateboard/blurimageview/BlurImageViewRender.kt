@@ -2,16 +2,18 @@ package com.skateboard.blurimageview
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.opengl.GLES30
 import android.opengl.GLSurfaceView
 import java.io.*
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class BlurImageViewRender(private val context: Context, private val bitmap: Bitmap) : GLSurfaceView.Renderer
+class BlurImageViewRender(private val context: Context, private var bitmap: Bitmap?) : GLSurfaceView.Renderer
 {
 
+    private var srcWidth: Int = 0
+
+    private var srcHeight: Int = 0
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?)
     {
@@ -31,8 +33,7 @@ class BlurImageViewRender(private val context: Context, private val bitmap: Bitm
                 item = inReader.readLine()
             }
             inReader.close()
-        }
-        catch (e: IOException)
+        } catch (e: IOException)
         {
             e.printStackTrace()
         }
@@ -42,11 +43,25 @@ class BlurImageViewRender(private val context: Context, private val bitmap: Bitm
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int)
     {
-        val vertex = readSlgl("vertex.slgl")
-        val fragment = readSlgl("fragment.slgl")
-        prepare(vertex, fragment, bitmap, width, height)
-        //        bitmap.recycle()
+        prepare(width, height)
         GLES30.glViewport(0, 0, width, height)
+    }
+
+    private fun prepare(width: Int, height: Int)
+    {
+        srcWidth = width
+        srcHeight = height
+        bitmap?.let {
+            val vertex = readSlgl("vertex.slgl")
+            val fragment = readSlgl("fragment.slgl")
+            prepare(vertex, fragment, it, width, height)
+        }
+    }
+
+    fun setImageBitmap(bitmap: Bitmap)
+    {
+        this.bitmap = bitmap
+        prepare(srcWidth, srcHeight)
     }
 
     override fun onDrawFrame(gl: GL10?)
